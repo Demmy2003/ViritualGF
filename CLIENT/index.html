@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Girlfriend</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main>
+    <section>
+        <div></div>
+        <div>
+            <h2>Chat</h2>
+            <label for="userInput">Ask a question:</label>
+            <input type="text" id="userInput" placeholder="Type your question...">
+            <button id="submitButton" onclick="submitQuestion()">Submit</button>
+            <div id="loadingSpinner" class="hidden">Loading...</div>
+            <div id="responseContainer"></div>
+        </div>
+        <div></div>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
