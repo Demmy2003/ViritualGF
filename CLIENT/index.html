@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Girlfriend</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+
 </head>
 <body>
 
@@ -19,7 +22,8 @@
             <button class="chatbox" id="submitButton" onclick="submitQuestion()">Send</button>
             <div id="loadingSpinner" class="hidden">Loading...</div>
         </div>
-        <div class="empty"><button class="chatbox" onclick="clearChat()">Clear Chat</button></div>
+
+        <div class="empty">    <button id="togglePlay">Toggle Play</button><button class="chatbox" onclick="clearChat()">Clear Chat</button></div>
         <img class="girl" src="img/anime-204-263x300.png" alt="Maya's image">
     </section>
 </main>

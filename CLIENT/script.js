@@ -1,7 +1,40 @@
 
+window.onSpotifyWebPlaybackSDKReady = () => {
+    const token = 'BQBSYWU05Ko-cWDuSnIIiQlarMl65YztkRp0xXXyX5w1akd9_VKWYbzqtvO7rZDkZmzanVk2sRg0aK11SGV_C2AzG-b81ENLO-CZh6rhrZjppK9ZYSzjPsZr-U9jumsUJBvFx3vDEt-OB4RzypbdmB7yI1rYsqnEwkxylbWClHRzJ-cuS4Iml4mnftEMASgubo-L';
+    const player = new Spotify.Player({
+        name: 'Web Playback SDK Quick Start Player',
+        getOAuthToken: cb => { cb(token); },
+        volume: 0.5
+    });
 
-//////////////////////////////////////////////////////////////////////
+    // Ready
+    player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+    });
 
+    // Not Ready
+    player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+    });
+
+    player.addListener('initialization_error', ({ message }) => {
+        console.error(message);
+    });
+
+    player.addListener('authentication_error', ({ message }) => {
+        console.error(message);
+    });
+
+    player.addListener('account_error', ({ message }) => {
+        console.error(message);
+    });
+
+    document.getElementById('togglePlay').onclick = function() {
+        player.togglePlay();
+    };
+
+    player.connect();
+}
 function getChatHistory() {
     try {
         const storedHistory = localStorage.getItem('myChatHistory');
@@ -61,7 +94,7 @@ async function submitQuestion() {
 
     // Send a POST request to the server with the user's input and updated chat history
     try {
-        const response = await fetch('http://localhost:3000/chat', {
+        const response = await fetch('https://viritualgirlfriend.netlify.app/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,6 +107,10 @@ async function submitQuestion() {
         // Update the chat history on the client side
         updateChatHistory(data.chatHistory);
         chatHistoryContainer.innerHTML = displayChatHistory(data.chatHistory);
+        chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
+        if(userInput === "clear chat") {
+            clearChat()
+        }
 
     } catch (error) {
         console.error('Error:', error);
