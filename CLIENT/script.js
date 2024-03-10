@@ -84,7 +84,9 @@ async function submitQuestion() {
         loadingSpinner.style.display = 'none';
     }
 }
-
+const submitButton = document.getElementById('submitButton');
+submitButton.addEventListener('click', submitQuestion);
+submitButton.addEventListener('touchstart', submitQuestion);
 // Load and display initial chat history
 const initialChatHistory = getChatHistory();
 document.getElementById('chatHistoryContainer').innerHTML = displayChatHistory(initialChatHistory);
