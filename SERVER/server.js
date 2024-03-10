@@ -68,7 +68,7 @@ const main = async () => {
                 res.status(500).json({ error: "ERROR 500: Internal Server Error" });
             }
         });
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Server is running on port ${port}`);
         });
         const joke = await model.invoke("what is 9+10?");
