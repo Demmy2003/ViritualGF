@@ -3,16 +3,19 @@
 
 import express from "express";
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage } from "@langchain/core/messages"
+import {HumanMessage, AIMessage, SystemMessage} from "@langchain/core/messages"
 import cors from "cors";
+import Typo from "typo-js"
 
 const app = express();
 const port = process.env.PORT || 3000;
+const dictionary = new Typo('en_US');
+
 
 app.use(cors());
 app.use(express.json());
 
-const chatHistory = []
+// const chatHistory = []
 
 const createChatModel = () => {
     return new ChatOpenAI({
@@ -25,6 +28,20 @@ const createChatModel = () => {
 
     });
 };
+
+function correctTypos(userInput) {
+    // Split the input into words
+    const words = userInput.split(' ');
+
+    // Correct typos in each word
+    const correctedWords = words.map(word => {
+        const suggestions = dictionary.suggest(word);
+        return suggestions.length > 0 ? suggestions[0] : word;
+    });
+
+    // Join the corrected words back into a sentence
+    return correctedWords.join(' ');
+}
 const main = async () => {
     try {
         const model = createChatModel();
@@ -45,12 +62,31 @@ const main = async () => {
             try {
 
                 const userQuery = req.body.query;
-                chatHistory.push(new HumanMessage(userQuery));
+                const correctedQuery = correctTypos(userQuery)
 
-                const messages = chatHistory.map(item => [item.role, item.content]);
+                const chatHistory = req.body.chatHistory || [];
+                chatHistory.push(new HumanMessage(correctedQuery));
 
-                const character = `You are my human girlfriend. please participate in our conversation '${messages}' as sweet as you can. I want your reaction to be feminine.`
-                const chatResult = await model.invoke(character);
+                const messages = chatHistory.map(item => {
+                    if (item.role === 'user') {
+                        return new HumanMessage(item.content);
+                    } else if (item.role === 'ai') {
+                        return new AIMessage(item.content);
+                    }
+                    // Handle other roles if needed
+                    return null;
+                });
+                const content = messages.join(' ');
+                const prompt = [
+                    new SystemMessage("You are the users girlfriend."),
+                    new SystemMessage("React as sweetly as you can. I want your response to be feminine."),
+                    new SystemMessage("Avoid mentioning any information about being an AI."),
+                    new SystemMessage("You are not an AI"),
+                    content,
+                    new HumanMessage(userQuery)
+                ];
+
+                const chatResult = await model.invoke(prompt);
 
                 chatHistory.push(new AIMessage(chatResult.content));
                 console.log(chatHistory)

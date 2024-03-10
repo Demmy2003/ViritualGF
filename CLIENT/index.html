@@ -10,17 +10,17 @@
 
 <main>
     <section class="background">
-        <div class="girl"><img src="img/anime-204-263x300.png"></div>
+        <div class="empty"></div>
         <div class="chat">
             <h2>Maya</h2>
             <label for="userInput"></label>
             <div id="chatHistoryContainer"></div>
-            <div id="responseContainer"></div>
-            <input type="text" id="userInput" placeholder="Start chatting with your girlfriend...">
-            <button id="submitButton" onclick="submitQuestion()">Submit</button>
+            <input class="chatbox" type="text" id="userInput" placeholder="Start chatting with your girlfriend...">
+            <button class="chatbox" id="submitButton" onclick="submitQuestion()">Send</button>
             <div id="loadingSpinner" class="hidden">Loading...</div>
         </div>
-        <div class="empty"></div>
+        <div class="empty"><button class="chatbox" onclick="clearChat()">Clear Chat</button></div>
+        <img class="girl" src="img/anime-204-263x300.png" alt="Maya's image">
     </section>
 </main>
 
