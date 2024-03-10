@@ -3,6 +3,7 @@ async function submitQuestion() {
     const responseContainer = document.getElementById('responseContainer');
     const submitButton = document.getElementById('submitButton');
     const loadingSpinner = document.getElementById('loadingSpinner');
+    const chatHistoryContainer = document.getElementById('chatHistoryContainer');
 
     // Disable input and submit button, show loading spinner
     document.getElementById('userInput').disabled = true;
@@ -25,7 +26,7 @@ async function submitQuestion() {
         const data = await response.json();
 
         // Display the response from the server in the response container
-        responseContainer.innerHTML = `<p>${data.content}</p>`;
+        chatHistoryContainer.innerHTML = displayChatHistory(data.chatHistory);
     } catch (error) {
         console.error('Error:', error);
         // Display an error message in the response container
@@ -36,4 +37,15 @@ async function submitQuestion() {
         submitButton.disabled = false;
         loadingSpinner.style.display = 'none';
     }
+}
+
+function displayChatHistory(chatHistory) {
+    return chatHistory.map(item => {
+        if (item.role === 'user') {
+            return `<p>You: ${item.content}</p>`;
+        } else if (item.role === 'ai') {
+            return `<p>Maya: ${item.content}</p>`;
+        }
+        return ''; // Handle other roles if needed
+    }).join('');
 }

@@ -3,15 +3,16 @@
 
 import express from "express";
 import { ChatOpenAI } from "@langchain/openai";
-// import { HumanMessage, SystemMessage, AIMessage } from "langchain/chat_models/messages"
+import { HumanMessage, AIMessage } from "@langchain/core/messages"
 import cors from "cors";
-
 
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(cors());
 
+app.use(cors());
 app.use(express.json());
+
+const chatHistory = []
 
 const createChatModel = () => {
     return new ChatOpenAI({
@@ -44,10 +45,24 @@ const main = async () => {
             try {
 
                 const userQuery = req.body.query;
-                const character = `You are my girlfriend. Reply to my message ${userQuery} as sweet as you can. I want your reaction to be feminine.`
+                chatHistory.push(new HumanMessage(userQuery));
+
+                const messages = chatHistory.map(item => [item.role, item.content]);
+
+                const character = `You are my human girlfriend. please participate in our conversation '${messages}' as sweet as you can. I want your reaction to be feminine.`
                 const chatResult = await model.invoke(character);
 
-                res.json({ content: chatResult.content });
+                chatHistory.push(new AIMessage(chatResult.content));
+                console.log(chatHistory)
+
+                res.json({
+                    content: chatResult.content,
+                    chatHistory: chatHistory.map(item => ({
+                        role: item instanceof HumanMessage ? 'user' : 'ai',
+                        content: item.content
+                    }))
+                });
+
             } catch (error) {
                 console.error("Error:", error.message);
                 res.status(500).json({ error: "ERROR 500: Internal Server Error" });

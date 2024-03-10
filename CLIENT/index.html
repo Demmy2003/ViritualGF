@@ -9,17 +9,18 @@
 <body>
 
 <main>
-    <section>
-        <div></div>
-        <div>
-            <h2>Chat</h2>
-            <label for="userInput">Ask a question:</label>
-            <input type="text" id="userInput" placeholder="Type your question...">
+    <section class="background">
+        <div class="girl"><img src="img/anime-204-263x300.png"></div>
+        <div class="chat">
+            <h2>Maya</h2>
+            <label for="userInput"></label>
+            <div id="chatHistoryContainer"></div>
+            <div id="responseContainer"></div>
+            <input type="text" id="userInput" placeholder="Start chatting with your girlfriend...">
             <button id="submitButton" onclick="submitQuestion()">Submit</button>
             <div id="loadingSpinner" class="hidden">Loading...</div>
-            <div id="responseContainer"></div>
         </div>
-        <div></div>
+        <div class="empty"></div>
     </section>
 </main>
 
