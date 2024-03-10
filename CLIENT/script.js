@@ -94,7 +94,7 @@ async function submitQuestion() {
 
     // Send a POST request to the server with the user's input and updated chat history
     try {
-        const response = await fetch('https://viritualgirlfriend.netlify.app/chat', {
+        const response = await fetch('http://localhost:3000/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -71,7 +71,7 @@ const main = async () => {
         const model = createChatModel();
 
 
-        app.get("https://viritualgirlfriend.netlify.app/joke", async (req, res) => {
+        app.get("/joke", async (req, res) => {
             try {
 
                 const joke = await model.invoke("tell me a joke");
@@ -82,7 +82,7 @@ const main = async () => {
             }
         });
 
-        app.post("https://viritualgirlfriend.netlify.app/chat", async (req, res) => {
+        app.post("/chat", async (req, res) => {
             try {
 
                 const userQuery = req.body.query;
